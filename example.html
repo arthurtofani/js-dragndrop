@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Smashing HTML5!</title>
+	</head>
+ 
+	<body>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script type="text/javascript" src="js-dragndrop.js"></script>	
+
+		<div id="container">
+			scaled - 70% from the original size
+			<!--div id="pai">
+				<div id="el1" class="small-square pos1">drag it</div>
+				desn't work yet
+			</div-->
+			<div id="el1" class="small-square pos1">drag it</div>
+			<div id="el2" class="small-square pos2">drag it 2</div>
+			<div class="small-square2 pos3">drop here</div>
+
+		<script type="text/javascript">
+
+			// you can create more than 1 set of drag handlers...			
+			var drag1= new DragnDrop($("#container"));
+			// receives jquery element collections
+			drag1.addDraggableElements($(".small-square"))
+/*
+
+			/* further possible configurations:
+			drag1.addTargetElements($("#target-element"))
+			drag1.onTargetHit(function(element, target){ ... })
+			drag1.dropOutOfTargetBehavior = DragnDrop.ANIMATE_BACK
+											DragnDrop.STAY
+											DragnDrop.BACK
+
+			*/
+		</script>	
+
+<style>
+	html, body {
+		height:100%;
+		background-color:rgba(42, 222, 222, 0.1);
+	}
+
+	#pai {
+		position:absolute;
+		top:400px;
+		left:400px;
+		border:1px solid black;
+		width:300px;
+		height:300px;
+		overflow: visible;
+	}
+
+	#container {
+		border:2px solid blue;
+		background-color:rgba(55, 22, 21, 0.2);
+		position:absolute;
+		width:800px;
+		height:700px;
+		overflow:hidden;
+		-webkit-transform: scale(0.7);
+	}
+	.small-square {
+		display:block;
+		width:80px;
+		height:80px;
+		position:absolute;
+		border:1px solid red;
+		background-color:rgba(255, 222, 1, 0.3);
+	}
+	.small-square2 {
+		display:block;
+		width:100px;
+		height:100px;
+		position:absolute;
+		border:1px solid green;
+		background-color:rgba(55, 222, 221, 0.3);
+	}
+	.pos1 {
+		top:50px;
+		left:50px;
+	}
+	.pos2 {
+		top:150px;
+		left:250px;
+	}
+
+	.pos3 {
+		top:100px;
+		left:450px;
+	}
+	.for-drag {
+		cursor:pointer;
+	}
+</style>
+
+</div>
+</body>
+</html>
