@@ -22,28 +22,32 @@ var DragnDrop = function(container) {
 	this.matchElements =  [];
 	this.dragBehavior = "move"; // ghost
 	this.dropBehavior =  "leave"; // match_nearest
+	this.eventOptions = null;
 	this.touch = 'ontouchstart' in document.documentElement;
 	var dd = this;
-		$(document).mousemove(function(ev){
-			dd.move(ev);
-		})
-		$(document).mouseup(function(){
-			dd.stopDrag();
-		});
 
-
+	if(this.touch){
 		document.addEventListener('touchmove',function(ev){
 			dd.move(ev);
 		});
 
-		document.addEventListener('touchend',function(){
+		document.addEventListener('touchend',function(ev){
 			dd.stopDrag();
 		});
+	}else{
+		$(document).mousemove(function(ev){
+			dd.move(ev);
+		})
+		$(document).mouseup(function(ev){
+			dd.stopDrag(ev);
+		});
+	}
 }
 
-DragnDrop.prototype.addDraggableElements = function(el){
+DragnDrop.prototype.addDraggableElements = function(el,options){
 	e = $(el)
 	e.addClass("for-drag")
+	this.eventOptions = options;
 	dd = this;
 	var element = null;
 	for(var i=0; i<e.length;i++) {
@@ -51,18 +55,17 @@ DragnDrop.prototype.addDraggableElements = function(el){
 		if(!element) continue;
 		this.draggableElements.push(element);
 
-
-		 if(this.touch){
+		if(this.touch){
 			e[i].addEventListener('touchstart',function(ev){
 				dd.onDragElementMouseDown(ev.currentTarget, ev);
 				ev.preventDefault();
 			});
-		 }else{
+		}else{
  			$(element).mousedown(function(ev){
-				dd.onDragElementMouseDown(ev.currentTarget, ev)
+				dd.onDragElementMouseDown(ev.currentTarget, ev);
 				ev.preventDefault();
 			});
-		 }
+		}
 	}
 }
 
@@ -77,11 +80,11 @@ DragnDrop.prototype.onDragElementMouseDown = function(el, ev){
 	this.draggingElementOffset = [offsetX, offsetY];
 	this.screenOffset = [ev.screenX, ev.screenY];
 	this.startDrag($(el));
+	if(this.eventOptions.start) options.start(this.draggingElement,ev);
 }
 
 DragnDrop.prototype.startDrag = function(el){
-	this.draggingElement = el;
-	var dd = this;
+	this.draggingElement = el;	
 }
 
 DragnDrop.prototype.getDimensions = function(context){
@@ -113,10 +116,15 @@ DragnDrop.prototype.move = function(ev){
 	this.draggingElement.css('position', 'absolute');	
 	this.draggingElement.css('left', left + 'px');
 	this.draggingElement.css('top', top + 'px');
+
+
+	if(this.eventOptions.move) options.move(this.draggingElement,ev);
 }
 
 
-DragnDrop.prototype.stopDrag = function(e){	
+DragnDrop.prototype.stopDrag = function(ev){	
+	if(this.touch) ev = ev.touches[0];
+	if(this.eventOptions.end) options.end(this.draggingElement,ev);
 	this.draggingElement = null;
 }
 

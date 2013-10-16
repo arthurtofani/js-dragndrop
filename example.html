@@ -24,8 +24,20 @@
 
 			// you can create more than 1 set of drag handlers...			
 			var drag1= new DragnDrop($("#container"));
+			// you can create custom events
+			var options = {
+				start : function(target,ev){
+					$(target).css('background-color','rgba(255, 65, 1, 0.3)');
+				},
+				move : function(target,ev){
+					$(target).css('background-color','rgba(55, 255, 55, 0.3)');
+				},
+				end :  function(target,ev){
+					$(target).css('background-color','rgba(255, 222, 1, 0.3)');
+				}
+			}
 			// receives jquery element collections
-			drag1.addDraggableElements($(".small-square"));
+			drag1.addDraggableElements($(".small-square"),options);
 			
 			/* further possible configurations:
 			drag1.addTargetElements($("#target-element"))
